@@ -6,12 +6,16 @@ import { SocketContext } from 'context/contexts';
 
 
 function App() {
-  const { socketState, currentConnections } = useSocket()
+  const { sessionID, socketState, currentConnections, currentSceneInfo } = useSocket()
 
   return (
     <SocketContext.Provider value={socketState}>
       <div className="app">
-        <Home currentConnections={currentConnections}/>
+        <Home 
+          sessionID={sessionID} 
+          currentConnections={currentConnections} 
+          currentSceneInfo={currentSceneInfo}
+        />
       </div>
     </SocketContext.Provider>
   );
