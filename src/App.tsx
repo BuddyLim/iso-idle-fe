@@ -1,22 +1,23 @@
 import Home from 'components/Home/index-Home';
-import React, { useEffect } from 'react';
 import 'styles/reset.css'
 import 'styles/App.css'
-import { io } from "socket.io-client";
+import useSocket from 'hooks/useSocket';
+import { SocketContext } from 'context/contexts';
+
 
 function App() {
-  useEffect(() =>{
-    const socket = io(process.env.REACT_APP_WS_BE_URL as string);
-    socket.emit("message")
-    return () =>{
-      socket.close()
-    }
-  }, [])
+  const { sessionID, socketState, currentConnections, currentSceneInfo } = useSocket()
 
   return (
-    <div className="app">
-      <Home/>
-    </div>
+    <SocketContext.Provider value={socketState}>
+      <div className="app">
+        <Home 
+          sessionID={sessionID} 
+          currentConnections={currentConnections} 
+          currentSceneInfo={currentSceneInfo}
+        />
+      </div>
+    </SocketContext.Provider>
   );
 }
 
