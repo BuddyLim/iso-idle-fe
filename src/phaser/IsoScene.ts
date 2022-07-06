@@ -10,7 +10,7 @@ export class IsoScene extends Phaser.Scene{
   isLoaded: boolean = false
   soundEffectMap: Map<string, Phaser.Sound.BaseSound> = new Map() 
   isoProjectionAngle: number = 0.460
-  tileCreatorCollection: TileCreatorCollection | null = null
+  coordinateArray: Array<Array<IsoSprite>> = []
 
   constructor() {
     super({
@@ -21,7 +21,7 @@ export class IsoScene extends Phaser.Scene{
   }
 
   preload() {
-    this.load.image('tile', `${process.env.PUBLIC_URL}/assets/landscapeTiles_067.png`);
+    this.load.image('tile', `${process.env.PUBLIC_URL}/assets/grass.png`);
     this.load.image('building-1', `${process.env.PUBLIC_URL}/assets/buildingTiles_002.png`);
     this.load.image('coniferAltShort', `${process.env.PUBLIC_URL}/assets/coniferAltShort.png`);
     this.load.image('coniferAltTall', `${process.env.PUBLIC_URL}/assets/coniferAltTall.png`);
@@ -32,10 +32,10 @@ export class IsoScene extends Phaser.Scene{
   }
 
   create() {
-    this.tileCreatorCollection = new TileCreatorCollection(this)
+    const tileCreatorCollection = new TileCreatorCollection(this)
 
     this.events.on("shutdown",() => {
-      this.tileCreatorCollection?.closeCreatorCollection()
+      tileCreatorCollection?.closeCreatorCollection()
     });
   }
 
