@@ -11,13 +11,19 @@ export class FloorTileCreator extends BaseTileCreator{
   triggerTimer: any
   debug: boolean = false
   zz: number = 0
+  name: string = "floorTile"
+  layer: Phaser.GameObjects.Layer | null = null
+  depth: number = 0
 
   constructor(scene: any){
     super(scene)
+    scene[this.name] = scene.add.group()
     this.initCreator()
   }
 
-  initCreator = () => {
+  override initCreator = () => {
+    this.layer = this.scene.add.layer()
+    this.layer?.setDepth(this.depth)
     /*
     * Define a closure to increment the value of tweenDelay while
     * being able to pass as parameter and maintain the value
@@ -34,15 +40,17 @@ export class FloorTileCreator extends BaseTileCreator{
   }
 
   placeTileByXX = (incrementTweenDelay: () => number) =>{
-    for (let xx = 0; xx < 512; xx += 36) {
+    for (let xx = 0; xx < 512; xx += this.tileIncrement) {
       this.placeTileByYY(incrementTweenDelay, xx)
     }
   }
 
   placeTileByYY = (incrementTweenDelay: () => number, xx: number) =>{
-    for (let yy = 0; yy < 512; yy += 36) {
+    for (let yy = 0; yy < 512; yy += this.tileIncrement) {
       let isoTile: IsoSprite
-      isoTile = this.placeTile(xx, yy, this.zz, FloorTileEnum.BASE)
+      isoTile = this.placeTile(xx, yy, this.zz, FloorTileEnum.BASE, this.name, this.layer!)
+      this.layer?.add(isoTile)
+      this.layer?.depthSort()
       this.animateTile(isoTile, incrementTweenDelay())
     }
   }
